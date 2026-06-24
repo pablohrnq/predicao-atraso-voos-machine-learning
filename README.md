@@ -10,8 +10,8 @@ A proposta foi desenvolver um fluxo completo de análise, passando por:
 
 * exploração e entendimento dos dados;
 * identificação de padrões de atraso;
-* criação de variável alvo para classificação;
-* treinamento e comparação de modelos de Machine Learning;
+* criação de variável-alvo para classificação;
+* treinamento e comparação de modelos de machine learning;
 * análise de métricas de negócio e ajuste de limiar de decisão;
 * exportação dos resultados e leitura no Databricks para validação complementar.
 
@@ -47,11 +47,11 @@ Foi utilizada uma base amostral de voos contendo informações como:
 * `dep_delay`
 * `arr_delay`
 
-A variável alvo do projeto foi construída a partir de `dep_delay`.
+A variável-alvo do projeto foi construída a partir de `dep_delay`.
 
 ---
 
-## Definição da variável alvo
+## Definição da variável-alvo
 
 Foi criada a variável binária `atraso_15min`, definida da seguinte forma:
 
@@ -64,7 +64,7 @@ Exemplo de criação:
 df_modelo['atraso_15min'] = (df_modelo['dep_delay'] > 15).astype(int)
 ```
 
-Na amostra utilizada para modelagem, a distribuição da variável alvo ficou aproximadamente em:
+Na amostra utilizada para modelagem, a distribuição da variável-alvo ficou aproximadamente em:
 
 * **79,68%** dos voos sem atraso relevante
 * **20,32%** dos voos com atraso superior a 15 minutos
@@ -98,7 +98,7 @@ As análises incluíram:
 
 ## 2. Preparação dos dados
 
-Para a modelagem, foi criado um dataset específico contendo as variáveis preditoras e a variável alvo.
+Para a modelagem, foi criado um dataset específico contendo as variáveis preditoras e a variável-alvo.
 
 ### Variáveis utilizadas no modelo
 
@@ -132,7 +132,7 @@ Ao final do processo, a matriz de entrada ficou com **588 variáveis preditoras*
 
 O projeto foi estruturado como um problema de **classificação binária**.
 
-Foi realizada a separação entre treino e teste com `train_test_split`, utilizando estratificação da variável alvo.
+Foi realizada a separação entre treino e teste com `train_test_split`, utilizando estratificação da variável-alvo.
 
 ### Modelos testados
 
@@ -192,11 +192,11 @@ Além do limiar padrão de 0.50, foram testados outros pontos de corte para a pr
 
 ### Comparação de limiares
 
-| limiar | recall classe 1 | precision classe 1 | acurácia | leitura                                  |
-| ------ | --------------- | ------------------ | -------- | ---------------------------------------- |
-| 0.50   | 0.62            | 0.31               | 0.64     | Melhor equilíbrio geral                  |
-| 0.40   | 0.81            | 0.26               | 0.50     | Mais sensível para detectar atrasos      |
-| 0.35   | 0.87            | 0.24               | 0.41     | Recall alto, mas muitos falsos positivos |
+| Limiar | Recall classe 1 | Precision classe 1 | Acurácia | Leitura                                  |
+| ------ | --------------: | -----------------: | -------: | ---------------------------------------- |
+| 0.50   |            0.62 |               0.31 |     0.64 | Melhor equilíbrio geral                  |
+| 0.40   |            0.81 |               0.26 |     0.50 | Mais sensível para detectar atrasos      |
+| 0.35   |            0.87 |               0.24 |     0.41 | Recall alto, mas muitos falsos positivos |
 
 ### Conclusão sobre os limiares
 
@@ -218,18 +218,13 @@ Esse resultado indica que o modelo possui capacidade de separação **moderada**
 
 ## 7. Integração com Databricks
 
-Após a modelagem no Colab, os resultados do XGBoost foram exportados em arquivos `.csv` e carregados no **Databricks** para validação complementar.
+Após a modelagem no Colab, exportei os resultados do XGBoost para arquivos `.csv` e carreguei esses arquivos no **Databricks** para uma validação complementar.
 
-Foram levados para o Databricks:
+No Databricks, utilizei os resultados exportados para:
 
-* `resultado_modelo_xgboost.csv`
-* `comparacao_limiares_xgboost.csv`
-
-No ambiente Databricks, os arquivos foram lidos com Spark e utilizados para:
-
-* reconstrução da matriz de confusão;
-* leitura da tabela de limiares;
-* validação dos resultados do modelo em ambiente de dados.
+* reconstruir a matriz de confusão;
+* consultar a tabela de limiares;
+* validar os principais resultados do modelo em um ambiente de dados.
 
 Exemplo de leitura no Databricks:
 
@@ -263,10 +258,18 @@ predicao-atraso-voos-machine-learning/
 │
 ├─ README.md
 ├─ predicao_atraso_voos.ipynb
-├─ requirements.txt
-├─ comparacao_limiares_xgboost.csv
-└─ resultado_modelo_xgboost.csv
+└─ requirements.txt
 ```
+
+---
+
+## Resultado final
+
+Entre os modelos testados, o **XGBoost** foi o que apresentou o melhor equilíbrio para o objetivo do projeto.
+
+No limiar **0.50**, o modelo conseguiu identificar **250 dos 402 voos realmente atrasados** no conjunto de teste, com **recall de 0.62** para a classe de atraso e **AUC de aproximadamente 0.68**.
+
+Mesmo ainda apresentando falsos positivos, o modelo se mostrou uma boa prova de conceito para um problema real de classificação aplicado ao contexto de aviação.
 
 ---
 
@@ -275,7 +278,7 @@ predicao-atraso-voos-machine-learning/
 Durante o desenvolvimento deste projeto, os principais aprendizados foram:
 
 * análise exploratória com foco em interpretação de média vs mediana;
-* construção de variável alvo para classificação;
+* construção de variável-alvo para classificação;
 * tratamento de variáveis categóricas com one-hot encoding;
 * comparação entre modelos de classificação;
 * leitura prática de matriz de confusão, precision, recall e f1-score;
